@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %} 
+Dashboard Task
+{% endblock %}
+
+{% block content %}
+<section class="task-page">
+    <div class="task-toolbar">
+    <form method="GET">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input
+            type="text" 
+            name="search_by" 
+            placeholder="Cari task..."
+            value="{{ request.args.get('search_by', '') }}"
+        >
+
+        <select name="category_by">
+            <option value="">Semua Kategori</option>
+            <option value="umum">Umum</option>
+            <option value="belajar">Belajar</option>
+            <option value="project">Project</option>
+            <option value="pekerjaan">Pekerjaan</option>
+            <option value="pribadi">Pribadi</option>
+        </select>
+
+        <select name="status_by">
+            <option value="">Semua Status</option>
+            <option value="pending">Pending</option>
+            <option value="done">Done</option>
+        </select>
+
+        <select name="sort_by">
+            <option value="">Urutkan</option>
+            <option value="newest">Terbaru</option>
+            <option value="oldest">Terlama</option>
+            <option value="due_date">Deadline Terdekat</option>
+            <option value="priority">Prioritas Tertinggi</option>
+        </select>
+
+        <button type="submit" class="btn-primary">
+            Terapkan
+        </button>
+
+        <a href="{{ url_for('task.view') }}" class="btn-secondary">
+            Reset
+        </a>
+    </form>
+</div>
+    <div class="task-header">
+        <div>
+            <h1>Task Saya</h1>
+            <p>Kelola semua tugas kamu di sini.</p>
+        </div>
+
+        <a href="{{ url_for('task.add') }}" class="btn-primary">
+            + Tambah Task
+        </a>
+    </div>
+
+    {% if tasks %}
+        <div class="task-grid">
+            {% for task in tasks %}
+                <article class="task-card">
+                    <div class="task-card-header">
+                        <span class="task-category">
+                            {{ task.category }}
+                        </span>
+
+                        <span class="priority priority-{{ task.priority }}">
+                            {{ task.priority }}
+                        </span>
+                    </div>
+
+                    <h2>{{ task.title }}</h2>
+
+                    <p class="task-description">
+                        {{ task.descrip }}
+                    </p>
+
+                    <div class="task-meta">
+                        <span>Status: <span class="btn-mark">{{ task.statue }}</span></span>
+                        <span>Deadline: {{ task.due_date or "-" }}</span>
+                    </div>
+
+                    <div class="task-actions">
+                        <a href="{{ url_for('task.edit_task', id_=task.id) }}" class="btn-small btn-edit">
+                            Edit
+                        </a>
+
+                            <form method="POST" action="{{ url_for('task.mark_task', id_=task.id) }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn-small btn-mark">
+                                    Ubah Status
+                                </button>
+                            </form>
+
+                            <form method="POST" action="{{ url_for('task.delete_task', id_=task.id) }}" onsubmit="return confirm('Yakin ingin hapus task?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn-small btn-delete" >
+                                    Hapus
+                                </button>
+                            </form>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+
+        <div class="pagination">
+            {% set search_by = request.args.get('search_by') %}
+            {% set category_by = request.args.get('category_by') %}
+            {% set status_by = request.args.get('status_by') %}
+            {% set sort_by = request.args.get('sort_by') %}
+            {% if page > 1 %}
+                <a href="{{ url_for('task.view', page=page-1, search_by=search_by if search_by, category_by=category_by if category_by, status_by=status_by if status_by, sort_by=sort_by if sort_by) }}">
+                    Sebelumnya
+                </a>
+            {% endif %}
+
+            <span>Halaman {{ page }} dari {{ total_pages }}</span>
+
+            {% if page < total_pages %}
+                <a href="{{ url_for('task.view', page=page+1, search_by=search_by if search_by, category_by=category_by if category_by, status_by=status_by if status_by, sort_by=sort_by if sort_by) }}">
+                    Selanjutnya
+                </a>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h2>Belum ada task</h2>
+            <p>Mulai buat task pertama kamu sekarang.</p>
+
+            <a href="{{ url_for('task.add') }}" class="btn-primary">
+                Tambah Task
+            </a>
+        </div>
+    {% endif %}
+</section>
+
+
+{% endblock %}

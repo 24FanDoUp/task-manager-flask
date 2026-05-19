@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>Kelola Tugasmu dengan Lebih Mudah</h1>
+
+        <p>
+            Task Manager membantu kamu mencatat, mengatur, dan menyelesaikan
+            tugas harian dengan rapi.
+        </p>
+
+        <div class="hero-actions">
+                {% if not is_logged_in %}
+                <a href="{{ url_for('auth.register') }}" class="btn-primary">
+                        Mulai Sekarang
+                </a>
+                
+                <a href="{{ url_for('auth.login') }}" class="btn-secondary">
+                        Login
+                </a>
+                {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <h2>Fitur Utama</h2>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h3>Tambah Task</h3>
+            <p>Buat tugas baru dengan judul, deskripsi, deadline, kategori dan prioritas.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Atur Prioritas</h3>
+            <p>Tentukan tugas mana yang harus dikerjakan lebih dulu.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Status Tugas</h3>
+            <p>Tandai tugas sebagai selesai agar progresmu mudah dipantau.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Admin Dashboard</h3>
+            <p>Admin dapat mengelola user dan melihat data task secara terpusat.</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %} 
+View Task
+{% endblock %}
+
+{% block content %}
+
+<h2 class="title">List Task Menager</h2>
+<ul class="box">
+    <form method="GET">
+        <div class="search">
+            <p>Search Task: <input type="text" name="search_by" placeholder="search"></p>
+        </div>
+        <h2>Filter & Sort</h2>
+        <p>Category :
+            <select name="category_by" id="">
+                <option value="">All</option>
+                <option value="title">Title</option>
+                <option value="statue">Status</option>
+                <option value="category">Category</option>
+                <option value="create_at">created_at</option>
+                <option value="due_date">Due_date</option>
+            </select>
+        </p>
+        <p>Value (For Filter): <input type="text" name="value_by" placeholder="value"></p>
+        <p>Order (For Order) :
+            <select name="order_by" id="">
+                <option value="asc"> Ascending </option>
+                <option value="desc"> Descending </option>
+            </select>
+        </p>
+        <button type="submit"> Apply </button>
+    </form>
+
+    {% for task in tasks %}
+        <div class="task">
+            <h4 class="list"> {{task.title}} | {{task.category}} | {{task.statue}}</h4>
+            <p>Deskripsi | {{task.descrip}}</p>
+            <p>Batas Waktu | {{task.due_date}}</p>
+            <p>Priority | {{task.priority}}</p>
+            <p>Update | {{task.updated_at.strftime("%d-%m-%Y")}}</p>
+
+            <li class="box_fitur">
+                <a href="/task/edit/{{task.id}}" class="fitur">Edit</a>
+
+                <form action="/task/mark/{{task.id}}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="fitur">Mark</button>
+                </form>
+
+                <form
+                    action="/task/delete/{{task.id}}"
+                    method="POST"
+                    onsubmit="return confirm('Yakin ingin hapus task?')"
+                >
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="fitur">Delete</button>
+                </form>
+            </li>
+        </div>
+    {% endfor %}
+
+    <div class="">
+        {% set search_by = request.args.get('search_by') %}
+        {% set category_by = request.args.get('category_by') %}
+        {% set value_by = request.args.get('value_by') %}
+        {% set order_by = request.args.get('order_by') %}
+
+        {% if page > 1 %}
+            <a href="?page={{ page - 1}}{% if search_by %}&search_by={{ search_by }}{% endif %}{% if category_by %}&category_by={{ category_by }}{% endif %}{% if value_by %}&value_by={{ value_by }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}"
+            >Previous</a>
+        {% endif %}
+
+        {% for p in range(1, total_pages + 1) %}
+            {% if p == page %}
+                <strong>{{ p }}</strong>
+            {% else %}
+                <a href="?page={{ p }}{% if search_by %}&search_by={{ search_by }}{% endif %}{% if category_by %}&category_by={{ category_by }}{% endif %}{% if value_by %}&value_by={{ value_by }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}"
+                >{{ p }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page < total_pages %}
+            <a href="?page={{ page + 1 }}{% if search_by %}&search_by={{ search_by }}{% endif %}{% if category_by %}&category_by={{ category_by }}{% endif %}{% if value_by %}&value_by={{ value_by }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}"
+            >Next</a>
+        {% endif %}
+    </div>
+</ul>
+
+{% endblock %}

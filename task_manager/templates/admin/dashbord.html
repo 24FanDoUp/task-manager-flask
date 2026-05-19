@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<h1> Admin Panel</h1>
+
+<div class="admin_box">
+    <div class="table_wrapper">
+        <section class="table_section">
+            <h2>Users</h2>
+            <table border="1" class="admin_table">
+            <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th colspan="2">Action</th>
+            </tr>
+
+            {% for user in users %}
+            <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.role }}</td>
+                    {% if user.id != 1 %}
+                    <td>
+                            <form
+                                action="/admin/user/role/{{user.id}}"
+                                method="POST"
+                                onsubmit="return confirm('Yakin ingin menganti role?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="action_btn">Ganti role</button>
+                            </form>
+                    </td>
+                    <td>
+                            <form 
+                                action="/admin/user/delete/{{user.id}}"
+                                method="POST"
+                                onsubmit="return confirm('Yakin ingin menghapus user?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="action_btn">Delete</button>
+                            </form>
+                    </td>
+                    {% else %}
+                    <td colspan="2">Protected</td>
+                    {% endif%}
+            </tr>
+            {% endfor %}
+            </table>
+
+            <div class="">
+            {% if page_user > 1 %}
+                <a href="?page_user={{ page_user - 1}}&page_task={{page_task}}"
+                >Previous</a>
+            {% endif %}
+
+            {% for p in range(1, total_pages_user + 1) %}
+                {% if p == page_user %}
+                    <strong>{{ p }}</strong>
+                {% else %}
+                    <a href="?page_user={{ p }}&page_task={{page_task}}"
+                    >{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_user < total_pages_user %}
+                <a href="?page_user={{ page_user + 1 }}&page_task={{page_task}}"
+                >Next</a>
+            {% endif %}
+            </div>
+        </section>
+        
+        <section class="table_section">
+            <h2>Tasks</h2>
+            <table border="1" class="admin_table">
+            <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>User ID</th>
+                    <th>Action</th>
+            </tr>
+
+            {% for task in tasks %}
+            <tr>
+                    <td>{{ task.id }}</td>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.user_id }}</td>
+                    <td>
+                    <form
+                        action="/admin/task/delete/{{ task.id }}"
+                        method="POST"
+                        onsubmit="return confirm('Yakin ingin menghapus task?')">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="action_btn">Delete</button>
+                    </form>
+                    </td>
+            </tr>
+            {% endfor %}
+            </table>
+            <div class="">
+            {% if page_task > 1 %}
+                <a href="?page_task={{ page_task - 1}}&page_user={{page_user}}"
+                >Previous</a>
+            {% endif %}
+
+            {% for p in range(1, total_pages_task + 1) %}
+                {% if p == page_task %}
+                    <strong>{{ p }}</strong>
+                {% else %}
+                    <a href="?page_task={{ p }}&page_user={{page_user}}"
+                    >{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_task < total_pages_task %}
+                <a href="?page_task={{ page_task + 1 }}&page_user={{page_user}}"
+                >Next</a>
+            {% endif %}
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

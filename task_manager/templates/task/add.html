@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %} 
+ADD TASK
+{% endblock %}
+
+{% block content %}
+
+{% if error %}
+    <p style="color: red;">{{ error }}</p>
+{% elif error_date %}
+    <p style="color: red;">{{ error_date }}</p>
+{% endif %}
+
+<section class="task-form-page">
+    <div class="task-form-card">
+        <h1>Tambah Task</h1>
+        <p>Buat tugas baru agar lebih mudah dikelola.</p>
+
+        <form action="/task/add" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label for="title">Judul Task</label>
+                <input 
+                    type="text" 
+                    id="title" 
+                    name="title" 
+                    placeholder="Contoh: Belajar Flask Blueprint"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="descrip">Deskripsi</label>
+                <textarea 
+                    id="descrip" 
+                    name="descrip" 
+                    rows="4"
+                    placeholder="Tulis detail task di sini..."
+                ></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Kategori</label>
+                <select id="category" name="category" required>
+                    <option value="">-- Pilih Kategori --</option>
+                    <option value="umum">Umum</option>
+                    <option value="belajar">Belajar</option>
+                    <option value="project">Project</option>
+                    <option value="pekerjaan">Pekerjaan</option>
+                    <option value="pribadi">Pribadi</option>
+                    <option value="lainnya">Lainnya</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="priority">Prioritas</label>
+                <select id="priority" name="priority" required>
+                    <option value="">-- Pilih Prioritas --</option>
+                    <option value="rendah">Rendah</option>
+                    <option value="sedang">Sedang</option>
+                    <option value="tinggi">Tinggi</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="due_date">Deadline</label>
+                <input 
+                    type="date" 
+                    id="due_date" 
+                    name="due_date"
+                >
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ url_for('task.view') }}" class="btn-secondary">
+                    Batal
+                </a>
+
+                <button type="submit" class="btn-primary">
+                    Simpan Task
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

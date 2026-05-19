@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %} 
+Edit Task
+{% endblock %}
+
+{% block content %}
+
+<section class="task-form-page">
+    <div class="task-form-card">
+        <h1>Edit Task</h1>
+        <p>Perbarui data task kamu.</p>
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="title">Judul Task</label>
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    value="{{ task.title }}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="descrip">Deskripsi</label>
+                <textarea
+                    id="descrip"
+                    name="descrip"
+                    rows="4"
+                >{{ task.descrip }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Kategori</label>
+                <select id="category" name="category" required>
+                    <option value="umum" {% if task.category == "umum" %}selected{% endif %}>Umum</option>
+                    <option value="belajar" {% if task.category == "belajar" %}selected{% endif %}>Belajar</option>
+                    <option value="project" {% if task.category == "project" %}selected{% endif %}>Project</option>
+                    <option value="pekerjaan" {% if task.category == "pekerjaan" %}selected{% endif %}>Pekerjaan</option>
+                    <option value="pribadi" {% if task.category == "pribadi" %}selected{% endif %}>Pribadi</option>
+                    <option value="lainnya" {% if task.category == "lainnya" %}selected{% endif %}>Lainnya</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="priority">Prioritas</label>
+                <select id="priority" name="priority" required>
+                    <option value="rendah" {% if task.priority == "rendah" %}selected{% endif %}>Rendah</option>
+                    <option value="sedang" {% if task.priority == "sedang" %}selected{% endif %}>Sedang</option>
+                    <option value="tinggi" {% if task.priority == "tinggi" %}selected{% endif %}>Tinggi</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="due_date">Deadline</label>
+                <input
+                    type="date"
+                    id="due_date"
+                    name="due_date"
+                    value="{{ task.due_date }}"
+                >
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ url_for('task.view') }}" class="btn-secondary">
+                    Batal
+                </a>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn-primary">
+                    Simpan Perubahan
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock %}
