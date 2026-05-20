@@ -1,4 +1,4 @@
-
+'''admin'''
 from flask import Blueprint,request,redirect,render_template,flash,url_for,session
 
 from extensions import manager
@@ -107,8 +107,9 @@ def delete_user(user_id):
         flash("User tidak ditemukan","error")
         return redirect(url_for("admin.admin_dashbord"))
 
-    if user.id == session.get("user_id"):
-        return "Cannot delete yourself", 403
+    if user.role == "admin" or user.id == session["user_id"]:
+        flash("Tidak bisa ubah role sendiri","error")
+        return redirect(url_for("admin.admin_dashboard"))
 
     done_del = manager.delete_user(user)
     if done_del:
