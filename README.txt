@@ -1,5 +1,7 @@
                                    ----- Task Manager Web App -----
-
+--Landing page
+  Menampilkan ajakan untuk regitrasi/login menggunakan Web App ini. berisi pengenalan singkat unutk fitur-fitur yang ada dalam app.
+  
 Fitur:
 - Register/Login
     jika belum punya akun web app ini sudah memiliki sistem auth register dan login, user baru hanya di minta memasukkan username, passwword dan confirm
