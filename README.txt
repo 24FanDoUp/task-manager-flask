@@ -46,3 +46,16 @@ Tech stack:
 - Alembic
 - HTML/CSS
 - SQLite
+
+install and run web app
+berikt cara install dan run web app ini di local host
+1. Download seluruh folder&file
+2. buka task_manager/requiretments..txt
+3. install requiretments yang dibutuhakan
+4. cek dalam terminal menggunaknan pip list
+5. jika sudah semua buka task_manager/app.py dan
+6. Jalankan app.py
+
+
+
+
